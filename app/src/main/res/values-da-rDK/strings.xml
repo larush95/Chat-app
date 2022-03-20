@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="sign_out">Log ud</string>
+    <string name="write_here">Skriv her</string>
+    <string name="send">Send</string>
+    <string name="username">Brugernavn</string>
+    <string name="sent">"Sendt: "</string>
+    <string name="error.login">Fejl ved login</string>
+</resources>

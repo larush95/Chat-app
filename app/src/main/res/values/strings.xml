@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="sign_out">Sign-out</string>
+    <string name="write_here">Write here</string>
+    <string name="send">Send</string>
+    <string name="username">Username</string>
+    <string name="sent">Sent: </string>
+    <string name="error.login">Error logging in </string>
+    <string name="two_dynamic_words" translatable="false">%s %s</string>
+</resources>
