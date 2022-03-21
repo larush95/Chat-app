@@ -38,7 +38,6 @@
         android:id="@+id/messengerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingHorizontal="10dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         app:layout_constraintEnd_toEndOf="@+id/message"
         app:layout_constraintTop_toBottomOf="@id/message"
