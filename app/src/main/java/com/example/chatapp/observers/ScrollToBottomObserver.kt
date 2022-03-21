@@ -1,9 +1,10 @@
 
-package com.example.chatapp
+package com.example.chatapp.observers
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import com.example.chatapp.adapters.MessageAdapter
 
 class ScrollToBottomObserver(
     private val recycler: RecyclerView,

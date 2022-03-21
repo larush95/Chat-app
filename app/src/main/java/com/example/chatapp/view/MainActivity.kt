@@ -1,25 +1,32 @@
-package com.example.chatapp
+package com.example.chatapp.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.chatapp.R
+import com.example.chatapp.adapters.MessageAdapter
+import com.example.chatapp.components.DeleteMessageDialogFragment
 import com.example.chatapp.databinding.ActivityMainBinding
 import com.example.chatapp.model.Message
+import com.example.chatapp.observers.ButtonObserver
+import com.example.chatapp.observers.ScrollToBottomObserver
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity(), DeleteMessageDialogFragment.IDeleteMessageFragment {
     private lateinit var binding: ActivityMainBinding
     private lateinit var manager: LinearLayoutManager
     private lateinit var auth: FirebaseAuth
@@ -27,6 +34,9 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var db: FirebaseDatabase
     private lateinit var adapter: MessageAdapter
+
+    private var id: String? = null
+    private var deleteMessageDialogFragment = DeleteMessageDialogFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +51,20 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        db = FirebaseDatabase.getInstance("https://chatapp-c104d-default-rtdb.europe-west1.firebasedatabase.app/")
+        db =
+            FirebaseDatabase.getInstance("https://chatapp-c104d-default-rtdb.europe-west1.firebasedatabase.app/")
         val messagesRef = db.reference.child(MESSAGES_CHILD)
 
         val options = FirebaseRecyclerOptions.Builder<Message>()
             .setQuery(messagesRef, Message::class.java)
             .build()
-        adapter = MessageAdapter(options, getUserName())
+        adapter = MessageAdapter(options, getUserName(), this)
         binding.progressBar.visibility = ProgressBar.INVISIBLE
         manager = LinearLayoutManager(this)
         binding.recyclerView.layoutManager = manager
         binding.recyclerView.adapter = adapter
 
+        deleteMessageDialogFragment.listener = this
 
         adapter.registerAdapterDataObserver(
             ScrollToBottomObserver(binding.recyclerView, adapter, manager)
@@ -66,7 +78,7 @@ class MainActivity : AppCompatActivity() {
                     binding.chatField.text.toString(),
                     getUserName(),
                     getPhotoUrl(),
-                   getDateTimeString()
+                    getDateTimeString()
                 )
 
             db.reference.child(MESSAGES_CHILD).push().setValue(message)
@@ -136,6 +148,26 @@ class MainActivity : AppCompatActivity() {
         finish()
     }
 
+    fun showDialogFragment(id: String?) {
+        this.id = id
+        deleteMessageDialogFragment.show(supportFragmentManager, "dialog");
+    }
+
+    override fun confirmClicked() {
+        val ref = db.reference
+        val query: Query = ref.child(MESSAGES_CHILD).orderByChild("uid").equalTo(id!!)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    snapshot.ref.removeValue()
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.e(TAG, "onCancelled", databaseError.toException())
+            }
+        })
+
+    }
     companion object {
         private const val TAG = "MainActivity"
         const val MESSAGES_CHILD = "messages"

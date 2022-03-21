@@ -7,4 +7,7 @@
     <string name="username">Brugernavn</string>
     <string name="sent">"Sendt: "</string>
     <string name="error.login">Fejl ved login</string>
+    <string name="delete_message">Slet besked?</string>
+    <string name="cancel">Fortryd</string>
+    <string name="confirm">Bekræft</string>
 </resources>

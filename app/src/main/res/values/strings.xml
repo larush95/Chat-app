@@ -7,4 +7,7 @@
     <string name="sent">Sent: </string>
     <string name="error.login">Error logging in </string>
     <string name="two_dynamic_words" translatable="false">%s %s</string>
+    <string name="delete_message">Delete message?</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
 </resources>

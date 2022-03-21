@@ -1,10 +1,9 @@
 
-package com.example.chatapp
+package com.example.chatapp.observers
 
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
-import android.widget.ImageView
 
 class ButtonObserver(private val button: Button) : TextWatcher {
     override fun onTextChanged(charSequence: CharSequence, start: Int, count: Int, after: Int) {
